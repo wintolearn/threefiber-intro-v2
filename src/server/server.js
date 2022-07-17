@@ -1,5 +1,7 @@
-import express from 'express'
-import { Server } from 'socket.io'
+
+var express = require('express');
+var path = require('path');
+const {Server} = require('socket.io')
 
 const PORT = process.env.PORT || 3001
 
@@ -10,6 +12,13 @@ let welcomeMessage = 0
 app.get("/api",(req,res)=>{
     res.json({message:welcomeMessage})
 })
+
+app.use(express.static(path.join(__dirname, '../../build')));
+
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../build', 'index.html'));
+});
 
 const server = app.listen(PORT, ()=>{
     console.log(`Server listening on ${PORT}`)
