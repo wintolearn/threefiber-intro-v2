@@ -117,7 +117,7 @@ ioServer.on('connection', (client) => {
         )
 
         //Delete this client from the object
-        delete clients[client.id]
+        //delete clients[client.id]
 
         ioServer.sockets.emit('clicked', clients)
     })
