@@ -13,12 +13,14 @@ app.get("/api",(req,res)=>{
     res.json({message:welcomeMessage})
 })
 
+
 app.use(express.static(path.join(__dirname, '../../build')));
 
 
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 });
+
 
 const server = app.listen(PORT, ()=>{
     console.log(`Server listening on ${PORT}`)
@@ -44,15 +46,57 @@ ioServer.on('connection', (client) => {
 
     ioServer.sockets.emit('clicked', clients)
 
-    client.on('clicked', (id) => {
+    client.on('clicked right', (id) => {
+        console.log('id: '+id)
+        //console.log(clients)
+        console.log('clients[id]: ' + clients[id])
+        console.log(clients[id].position[0])
+        let offset = 0.1
+        clients[id].position[0]-=offset
+        //clients[id].position[1]+=offset
+        //clients[id].position[2]+=offset
+        
+        
+        ioServer.sockets.emit('clicked', clients)
+    })
+
+    client.on('clicked left', (id) => {
         console.log('id: '+id)
         //console.log(clients)
         console.log('clients[id]: ' + clients[id])
         console.log(clients[id].position[0])
         let offset = 0.1
         clients[id].position[0]+=offset
+        //clients[id].position[1]-=offset
+        //clients[id].position[2]-=offset
+        
+        
+        ioServer.sockets.emit('clicked', clients)
+    })
+
+    client.on('clicked down', (id) => {
+        console.log('id: '+id)
+        //console.log(clients)
+        console.log('clients[id]: ' + clients[id])
+        console.log(clients[id].position[0])
+        let offset = 0.1
+        //clients[id].position[0]+=offset
+        clients[id].position[1]-=offset
+        //clients[id].position[2]-=offset
+        
+        
+        ioServer.sockets.emit('clicked', clients)
+    })
+
+    client.on('clicked up', (id) => {
+        console.log('id: '+id)
+        //console.log(clients)
+        console.log('clients[id]: ' + clients[id])
+        console.log(clients[id].position[0])
+        let offset = 0.1
+        //clients[id].position[0]+=offset
         clients[id].position[1]+=offset
-        clients[id].position[2]+=offset
+        //clients[id].position[2]-=offset
         
         
         ioServer.sockets.emit('clicked', clients)
@@ -73,7 +117,7 @@ ioServer.on('connection', (client) => {
         )
 
         //Delete this client from the object
-        //delete clients[client.id]
+        delete clients[client.id]
 
         ioServer.sockets.emit('clicked', clients)
     })

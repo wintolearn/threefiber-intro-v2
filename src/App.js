@@ -195,21 +195,103 @@ function App() {
             <Canvas camera={{ position: [0, 1, -5], near: 0.1, far: 1000 }}>
                 <Stats />
                 <MapControls/>
+
                 <Html 
                 as='div' // Wrapping element (default: 'div')
-  >
+                >
 
-                <button  onClick={()=>{
+                <button  style={{
+                    color:'red',
+                    position: 'absolute',
+                    top:-30,
+                    right:-10
+                    
+                
+                }} onClick={()=>{
                   console.log('button clicked in app')
                   console.log('id: ' + id)
-                  socketClient.emit('clicked', 
+                  socketClient.emit('clicked up', 
                     id
                 )
                 }
                     
                 }
 
-                 >move</button>
+                 >up</button>
+
+                </Html> 
+
+                <Html 
+                as='div' // Wrapping element (default: 'div')
+                >
+
+                <button  style={{
+                    color:'red',
+                    position: 'absolute',
+                    top:30,
+                    right:-20
+                    
+                
+                }} onClick={()=>{
+                  console.log('button clicked in app')
+                  console.log('id: ' + id)
+                  socketClient.emit('clicked down', 
+                    id
+                )
+                }
+                    
+                }
+
+                 >down</button>
+
+                </Html> 
+
+
+ 
+                <Html 
+                as='div' // Wrapping element (default: 'div')
+                >
+
+                <button  style={{
+                    color:'red',
+                    position: 'absolute',
+                    top:'50%',
+                    right: 10
+                
+                }} onClick={()=>{
+                  console.log('button clicked in app')
+                  console.log('id: ' + id)
+                  socketClient.emit('clicked left', 
+                    id
+                )
+                }
+                    
+                }
+
+                 >left</button>
+
+                </Html> 
+                <Html 
+                as='div' // Wrapping element (default: 'div')
+                >
+
+                <button  style={{
+                    color:'red',
+                    position: 'absolute',
+                    top:'50%',
+                    left: 0
+                
+                }} onClick={()=>{
+                  console.log('button clicked in app')
+                  console.log('id: ' + id)
+                  socketClient.emit('clicked right', 
+                    id
+                )
+                }
+                    
+                }
+
+                 >right</button>
 
                 </Html> 
                 {/*below render the ControlsWrapper component and pass it socketClient as a prop */}
@@ -222,7 +304,7 @@ function App() {
                 //properties found in clients
                 //position: [0, 0, 0],
                 //rotation: [0, 0, 0],
-                    .filter((clientKey) => clientKey !== socketClient.id)
+                    //.filter((clientKey) => clientKey !== socketClient.id)
                     //filter creates a new array with elements that pass a test
                     //the id is the index or key in the key value pair
                     //the value is an object with position and rotation arrays
