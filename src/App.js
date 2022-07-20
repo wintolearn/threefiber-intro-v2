@@ -3,9 +3,38 @@ import { Canvas } from '@react-three/fiber'
 import {OrbitControls, MapControls, Stars, Stats, Text, Html} from "@react-three/drei"
 import { MeshNormalMaterial, BoxBufferGeometry } from 'three'
 import { io } from 'socket.io-client'
+
+import {Physics, useBox, useCylinder, usePlane} from "@react-three/cannon"
 //about 120 lines of code
 
 import './App.css'
+
+
+function Box(props) {
+    //const [ref,api] = useBox(()=>({mass: 1, position:[0,3,0]}))
+    const [ref,api] = useBox(()=>({ mass:1,args: [3.4, 1, 3.5]}))
+    //useBox(() => ({ type: "Kinematic", args: [3.4, 1, 3.5]
+    return (
+      <mesh onClick={()=>{
+        api.velocity.set(0,10,0)
+      }} ref={ref} >
+        <boxGeometry attach="geometry" args={[1, 1, 1]}/>
+        <meshPhysicalMaterial attach="material" color="hotpink"/>
+      </mesh>
+    )
+  }
+
+  function Plane(props) {
+    const [ref] = usePlane(()=>({rotation: [-Math.PI/2,0,0], position:[0,-3,0]}))
+    return (
+      <mesh rotation ={[-Math.PI,0,0]} position={[0,-3,0]}>
+        <boxBufferGeometry attach="geometry" args={[10,0.1,10]}/>
+        <meshLambertMaterial attach="material" color="white"/>
+      </mesh>
+    )
+  }
+
+
 //functional component
 const ControlsWrapper = ({ socket }) => {//takes socket as a prop
     //react components automatically re-render whenever there is a change to their state or props
@@ -127,6 +156,24 @@ const ButtonWrapper = ({ socket }) => {//takes socket as a prop
   </Html> 
 }
 
+const MoveButton = ({socketClient,id, direction, top, right}) =>{
+    return(
+        <Html as='div'>
+        <button  style={{
+            width:80,
+            height:30,
+            color:'red',
+            position: 'absolute',
+            top:top,
+            right: right
+        }} onClick={()=>{
+          socketClient.emit('clicked', id, direction
+        )}}
+        >{direction}</button>
+        </Html> 
+    )
+}
+
 const UserWrapper = ({ position, rotation, id }) => {
     return (
         <mesh
@@ -151,8 +198,15 @@ const UserWrapper = ({ position, rotation, id }) => {
 function App() {
     const [socketClient, setSocketClient] = useState(null)
     const [clients, setClients] = useState({})
+    const [first, setFirst] = useState('');
     
+    const handleSubmit = event => {
+        // 👇️ prevent page refresh
+        event.preventDefault();
     
+        console.log('form submitted ✅');
+        alert('form submitted')
+      };
 
     if(socketClient){
     var { id } = socketClient
@@ -193,107 +247,64 @@ function App() {
     return (
         socketClient && (//removing socketClient here has no effect
             <Canvas camera={{ position: [0, 1, -5], near: 0.1, far: 1000 }}>
-                <Stats />
+              
                 <MapControls/>
-
                 <Html 
                 as='div' // Wrapping element (default: 'div')
                 >
 
-                <button  style={{
-                    color:'red',
-                    position: 'absolute',
-                    top:-30,
-                    right:-10
-                    
-                
-                }} onClick={()=>{
-                  console.log('button clicked in app')
-                  console.log('id: ' + id)
-                  socketClient.emit('clicked up', 
-                    id
-                )
-                }
-                    
-                }
+                <form onSubmit={handleSubmit}
+                    style={{
+                        color:'red',
+                        position: 'absolute',
+                        top:-160,
+                        right:140}}
+                    >
+                    <label>
+                        Enter your answer:                  
+                    </label>
+                    <input
+                        type="text"
+                        answer="first"
+                        value={first}
+                        onChange={event => setFirst(event.target.value)}
+                    />
+                    <button type="submit">Submit</button>
+                    </form>
+                </Html>
 
-                 >up</button>
+                <MoveButton
+                    socketClient = {socketClient}
+                    id={id}
+                    direction={'forward'}
+                    top={-50}
+                    right={-35+300}
+                />
 
-                </Html> 
+                <MoveButton
+                    socketClient = {socketClient}
+                    id={id}
+                    direction={'back'}
+                    top={50}
+                    right={-30+300}
+                />
 
-                <Html 
-                as='div' // Wrapping element (default: 'div')
-                >
+                <MoveButton
+                    socketClient = {socketClient}
+                    id={id}
+                    direction={'left'}
+                    top={0}
+                    right={10+300}
+                />
 
-                <button  style={{
-                    color:'red',
-                    position: 'absolute',
-                    top:30,
-                    right:-20
-                    
-                
-                }} onClick={()=>{
-                  console.log('button clicked in app')
-                  console.log('id: ' + id)
-                  socketClient.emit('clicked down', 
-                    id
-                )
-                }
-                    
-                }
+                <MoveButton
+                    socketClient = {socketClient}
+                    id={id}
+                    direction={'right'}
+                    top={0}
+                    right={-80+300}
+                />
 
-                 >down</button>
-
-                </Html> 
-
-
- 
-                <Html 
-                as='div' // Wrapping element (default: 'div')
-                >
-
-                <button  style={{
-                    color:'red',
-                    position: 'absolute',
-                    top:'50%',
-                    right: 10
-                
-                }} onClick={()=>{
-                  console.log('button clicked in app')
-                  console.log('id: ' + id)
-                  socketClient.emit('clicked left', 
-                    id
-                )
-                }
-                    
-                }
-
-                 >left</button>
-
-                </Html> 
-                <Html 
-                as='div' // Wrapping element (default: 'div')
-                >
-
-                <button  style={{
-                    color:'red',
-                    position: 'absolute',
-                    top:'50%',
-                    left: 0
-                
-                }} onClick={()=>{
-                  console.log('button clicked in app')
-                  console.log('id: ' + id)
-                  socketClient.emit('clicked right', 
-                    id
-                )
-                }
-                    
-                }
-
-                 >right</button>
-
-                </Html> 
                 {/*below render the ControlsWrapper component and pass it socketClient as a prop */}
                
                 <gridHelper rotation={[0, 0, 0]} />
@@ -324,7 +335,14 @@ function App() {
                             />
                         )
                     })}
-\
+                <Stars/>
+                    <ambientLight intensity = {0.5}/>
+                    <spotLight position={[100,15,10]} angle={0.3}/>
+                <Physics>
+                        <Box/>
+                        <Plane/>
+                </Physics>
+
             </Canvas>
         )
     )

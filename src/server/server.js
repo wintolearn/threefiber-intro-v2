@@ -9,10 +9,13 @@ const app = express()
 
 let welcomeMessage = 0
 
+let runfromServer = true;
+
 app.get("/api",(req,res)=>{
     res.json({message:welcomeMessage})
 })
 
+if(runfromServer){
 
 app.use(express.static(path.join(__dirname, '../../build')));
 
@@ -20,6 +23,8 @@ app.use(express.static(path.join(__dirname, '../../build')));
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 });
+}
+
 
 
 const server = app.listen(PORT, ()=>{
@@ -37,8 +42,8 @@ ioServer.on('connection', (client) => {
 
     //Add a new client indexed by his id
     clients[client.id] = {
-        position: [Math.random()*5, Math.random()*5, Math.random()*5],
-        rotation: [Math.random()*5, Math.random()*5, Math.random()*5],
+        position: [Math.random()*5, 0, Math.random()*5],
+        rotation: [0, 0, 0],
     }
 
     console.log(client.id)
@@ -46,69 +51,62 @@ ioServer.on('connection', (client) => {
 
     ioServer.sockets.emit('clicked', clients)
 
-    client.on('clicked right', (id) => {
-        console.log('id: '+id)
-        //console.log(clients)
-        console.log('clients[id]: ' + clients[id])
-        console.log(clients[id].position[0])
+    client.on('clicked', (id,direction) => {
+        console.log('clicked')
+        console.log(id.id)
+        console.log(direction.direction)
         let offset = 0.1
-        clients[id].position[0]-=offset
-        //clients[id].position[1]+=offset
-        //clients[id].position[2]+=offset
-        
-        
+
+        if(direction == 'right'){
+            var x = 0
+            var moveInterval = setInterval(()=>{
+                clients[id].position[0]-=offset
+                ioServer.sockets.emit('clicked', clients)
+                x++
+                if(x>10){
+                    clearInterval(moveInterval)
+                }
+            },40
+            )
+        }
+        else if(direction == 'left'){
+            var x = 0
+            var moveInterval = setInterval(()=>{
+                clients[id].position[0]+=offset
+                ioServer.sockets.emit('clicked', clients)
+                x++
+                if(x>10){
+                    clearInterval(moveInterval)
+                }
+            },40
+            )
+        }
+        else if(direction == 'forward'){
+            var x = 0
+            var moveInterval = setInterval(()=>{
+                clients[id].position[2]+=offset
+                ioServer.sockets.emit('clicked', clients)
+                x++
+                if(x>10){
+                    clearInterval(moveInterval)
+                }
+            },40
+            )
+        }
+        else if(direction == 'back'){
+            var x = 0
+            var moveInterval = setInterval(()=>{
+                clients[id].position[2]-=offset
+                ioServer.sockets.emit('clicked', clients)
+                x++
+                if(x>10){
+                    clearInterval(moveInterval)
+                }
+            },40
+            )
+        }
+
         ioServer.sockets.emit('clicked', clients)
-    })
-
-    client.on('clicked left', (id) => {
-        console.log('id: '+id)
-        //console.log(clients)
-        console.log('clients[id]: ' + clients[id])
-        console.log(clients[id].position[0])
-        let offset = 0.1
-        clients[id].position[0]+=offset
-        //clients[id].position[1]-=offset
-        //clients[id].position[2]-=offset
-        
-        
-        ioServer.sockets.emit('clicked', clients)
-    })
-
-    client.on('clicked down', (id) => {
-        console.log('id: '+id)
-        //console.log(clients)
-        console.log('clients[id]: ' + clients[id])
-        console.log(clients[id].position[0])
-        let offset = 0.1
-        //clients[id].position[0]+=offset
-        clients[id].position[1]-=offset
-        //clients[id].position[2]-=offset
-        
-        
-        ioServer.sockets.emit('clicked', clients)
-    })
-
-    client.on('clicked up', (id) => {
-        console.log('id: '+id)
-        //console.log(clients)
-        console.log('clients[id]: ' + clients[id])
-        console.log(clients[id].position[0])
-        let offset = 0.1
-        //clients[id].position[0]+=offset
-        clients[id].position[1]+=offset
-        //clients[id].position[2]-=offset
-        
-        
-        ioServer.sockets.emit('clicked', clients)
-    })
-
-  
-
-    client.on('move', ({ id, rotation, position }) => {
-        clients[id].position = position
-        clients[id].rotation = rotation
-
-        ioServer.sockets.emit('move', clients)
     })
 
     client.on('disconnect', () => {
@@ -117,9 +115,9 @@ ioServer.on('connection', (client) => {
         )
 
         //Delete this client from the object
-        //delete clients[client.id]
+        delete clients[client.id]
 
-        ioServer.sockets.emit('clicked', clients)
+        //ioServer.sockets.emit('clicked', clients)
     })
 
 })
