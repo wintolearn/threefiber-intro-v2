@@ -285,8 +285,8 @@ function App() {
                     socketClient = {socketClient}
                     id={id}
                     direction={'add'}
-                    top={+200}
-                    right={-35+300}
+                    top={+100}
+                    right={-30+300}
                 />
 
                 <MoveButton
