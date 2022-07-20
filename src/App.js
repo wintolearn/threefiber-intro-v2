@@ -175,8 +175,11 @@ const MoveButton = ({socketClient,id, direction, top, right}) =>{
 }
 
 const UserWrapper = ({ position, rotation, id }) => {
+    //const [ref,api] = useBox(()=>({ mass:1,args: [1, 1, 1]}))
     return (
-        <mesh
+       
+        <mesh //ref={ref}
+          
             position={position}
             rotation={rotation}
             geometry={new BoxBufferGeometry()}
@@ -191,7 +194,12 @@ const UserWrapper = ({ position, rotation, id }) => {
             >
                 {id}
             </Text>
+            {/*
+            <boxGeometry attach="geometry" args={[1, 1, 1]}/>
+            <meshPhysicalMaterial attach="material" color="blue"/>
+            */}
         </mesh>
+      
     )
 }
 
@@ -276,6 +284,14 @@ function App() {
                 <MoveButton
                     socketClient = {socketClient}
                     id={id}
+                    direction={'add'}
+                    top={+200}
+                    right={-35+300}
+                />
+
+                <MoveButton
+                    socketClient = {socketClient}
+                    id={id}
                     direction={'forward'}
                     top={-50}
                     right={-35+300}
@@ -308,7 +324,12 @@ function App() {
                 {/*below render the ControlsWrapper component and pass it socketClient as a prop */}
                
                 <gridHelper rotation={[0, 0, 0]} />
-
+                <Stars/>
+                    <ambientLight intensity = {0.5}/>
+                    <spotLight position={[100,15,10]} angle={0.3}/>
+ 
+                <Physics>
+                
                 {/* Filter myself from the client list and create user boxes with IDs */}
                 {console.log('app rendering')}
                 {Object.keys(clients)//return an array whose elements are strings corresponding to the 
@@ -321,9 +342,11 @@ function App() {
                     //the value is an object with position and rotation arrays
                     .map((client) => {//iterate over an array and modify its 
                         //elements using a callback function
+                        console.log(clients[client])
                         const { position, rotation } = clients[client]
                         return (
                             <UserWrapper
+                           
                                 key={client}//using keys improves effciency
                                 //react doesn't have to iterate over all child elements
                                 //when one of them changes -- it knows by the key which one changed
@@ -335,10 +358,8 @@ function App() {
                             />
                         )
                     })}
-                <Stars/>
-                    <ambientLight intensity = {0.5}/>
-                    <spotLight position={[100,15,10]} angle={0.3}/>
-                <Physics>
+                    
+                
                         <Box/>
                         <Plane/>
                 </Physics>

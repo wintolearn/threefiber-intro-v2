@@ -9,7 +9,7 @@ const app = express()
 
 let welcomeMessage = 0
 
-let runfromServer = true;
+let runfromServer = false;
 
 app.get("/api",(req,res)=>{
     res.json({message:welcomeMessage})
@@ -35,10 +35,14 @@ const ioServer = new Server(server)
 
 let clients = {}
 
+let tempIdArray = []
+
 ioServer.on('connection', (client) => {
     console.log(
         `User ${client.id} connected, there are currently ${ioServer.engine.clientsCount} users connected`
     )
+    console.log('clientid is: '+typeof(client.id))
+    
 
     //Add a new client indexed by his id
     clients[client.id] = {
@@ -53,11 +57,47 @@ ioServer.on('connection', (client) => {
 
     client.on('clicked', (id,direction) => {
         console.log('clicked')
-        console.log(id.id)
-        console.log(direction.direction)
+        console.log(id)
+        console.log(direction)
         let offset = 0.1
 
-        if(direction == 'right'){
+        if(direction == 'add'){
+            //generate random string
+            for(let clientId in clients){
+                client = clients[clientId]
+                console.log(clientId)
+                console.log('initialize add - this is a client')
+            }
+
+            
+            const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            const charactersLength = characters.length;
+            length = 20
+            for ( let i = 0; i < length; i++ ) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            tempIdArray.push(result)
+            console.log(tempIdArray)
+            let tempID = result
+            console.log('tempID: '+tempIdArray[tempIdArray.length-1])
+            clients[tempIdArray[tempIdArray.length-1]] = {
+                //position: [clients[id].position[0], clients[id].position[1]+5, clients[id].position[2]],
+                position: [Math.random()*5, 0, Math.random()*5],
+                rotation: [0, 0, 0],
+            }
+
+            console.log(clients[client.tempID])
+
+            for(let clientId in clients){
+                client = clients[clientId]
+                console.log('this is a client')
+            }
+            ioServer.sockets.emit('clicked', clients)
+        }
+        else if(direction == 'right'){
+            
+            console.log('right clicked')
             var x = 0
             var moveInterval = setInterval(()=>{
                 clients[id].position[0]-=offset
@@ -68,6 +108,7 @@ ioServer.on('connection', (client) => {
                 }
             },40
             )
+            
         }
         else if(direction == 'left'){
             var x = 0
@@ -106,7 +147,7 @@ ioServer.on('connection', (client) => {
             )
         }
 
-        ioServer.sockets.emit('clicked', clients)
+        //ioServer.sockets.emit('clicked', clients)
     })
 
     client.on('disconnect', () => {
@@ -115,7 +156,7 @@ ioServer.on('connection', (client) => {
         )
 
         //Delete this client from the object
-        delete clients[client.id]
+        //delete clients[client.id]
 
         //ioServer.sockets.emit('clicked', clients)
     })
