@@ -9,7 +9,7 @@ const app = express()
 
 let welcomeMessage = 0
 
-let runfromServer = false;
+let runfromServer = true;
 
 app.get("/api",(req,res)=>{
     res.json({message:welcomeMessage})
