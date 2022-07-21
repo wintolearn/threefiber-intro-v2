@@ -46,7 +46,7 @@ ioServer.on('connection', (client) => {
 
     //Add a new client indexed by his id
     clients[client.id] = {
-        position: [Math.random()*5, 0, Math.random()*5],
+        position: [Math.floor(Math.random()*5), 0, Math.floor(Math.random()*5)],
         rotation: [0, 0, 0],
     }
 
@@ -83,7 +83,7 @@ ioServer.on('connection', (client) => {
             console.log('tempID: '+tempIdArray[tempIdArray.length-1])
             clients[tempIdArray[tempIdArray.length-1]] = {
                 //position: [clients[id].position[0], clients[id].position[1]+5, clients[id].position[2]],
-                position: [Math.random()*5, 0, Math.random()*5],
+                position: [Math.floor(Math.random()*5), 0, Math.floor(Math.random()*5)],
                 rotation: [0, 0, 0],
             }
 
@@ -98,51 +98,53 @@ ioServer.on('connection', (client) => {
         else if(direction == 'right'){
             
             console.log('right clicked')
-            var x = 0
+            var x = 1
             var moveInterval = setInterval(()=>{
                 clients[id].position[0]-=offset
                 ioServer.sockets.emit('clicked', clients)
-                x++
-                if(x>10){
+                if(x>=10){
                     clearInterval(moveInterval)
                 }
+                x++
             },40
             )
             
         }
         else if(direction == 'left'){
-            var x = 0
+            var x = 1
             var moveInterval = setInterval(()=>{
                 clients[id].position[0]+=offset
                 ioServer.sockets.emit('clicked', clients)
-                x++
-                if(x>10){
+                if(x>=10){
                     clearInterval(moveInterval)
                 }
+                x++
             },40
             )
         }
         else if(direction == 'forward'){
-            var x = 0
+            var x = 1
             var moveInterval = setInterval(()=>{
                 clients[id].position[2]+=offset
                 ioServer.sockets.emit('clicked', clients)
-                x++
-                if(x>10){
+                
+                if(x>=10){
                     clearInterval(moveInterval)
                 }
+                x++
             },40
             )
         }
         else if(direction == 'back'){
-            var x = 0
+            var x = 1
             var moveInterval = setInterval(()=>{
                 clients[id].position[2]-=offset
                 ioServer.sockets.emit('clicked', clients)
-                x++
-                if(x>10){
+                
+                if(x>=10){
                     clearInterval(moveInterval)
                 }
+                x++
             },40
             )
         }
