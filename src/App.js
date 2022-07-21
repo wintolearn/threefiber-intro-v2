@@ -64,7 +64,7 @@ const UserWrapper = ({ position, rotation, id, setId, setBlockId }) => {
                 //alert(id)
             }} 
 
-            scale={[0.5,0.5,0.5]}
+            scale={[0.7,1,0.5]}
             position={position}
             rotation={rotation}
             //geometry={new BoxBufferGeometry()}
