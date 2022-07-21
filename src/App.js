@@ -3,6 +3,8 @@ import { Canvas } from '@react-three/fiber'
 import {OrbitControls, MapControls, Stars, Stats, Text, Html} from "@react-three/drei"
 import { MeshNormalMaterial, BoxBufferGeometry } from 'three'
 import { io } from 'socket.io-client'
+import { MoveButton } from './components/moveButton'
+import {CustomCamera} from './components/customCamera'
 
 import {Physics, useBox, useCylinder, usePlane} from "@react-three/cannon"
 //about 120 lines of code
@@ -33,24 +35,6 @@ function Box(props) {
     )
   }
 
-
-const MoveButton = ({socketClient,id, direction, top, right}) =>{
-    return(
-        <Html as='div'>
-        <button  style={{
-            width:80,
-            height:30,
-            color:'red',
-            position: 'absolute',
-            top:top,
-            right: right
-        }} onClick={()=>{
-          socketClient.emit('clicked', id, direction
-        )}}
-        >{direction}</button>
-        </Html> 
-    )
-}
 
 const UserWrapper = ({ position, rotation, id, setId, setBlockId }) => {
     //const [ref,api] = useBox(()=>({ mass:1,args: [1, 1, 1]}))
@@ -167,9 +151,12 @@ function App() {
     //controls changed in comtrol wrapper->emit move message->new move message received
     //->fire the effect above to update clients object
     //->render everything below using the updated clients object
+    /*<Canvas camera={{ position: [-1, 8, -5], near: 0.1, far: 1000 }}>*/
     return (
         socketClient && (//removing socketClient here has no effect
-            <Canvas camera={{ position: [-1, 8, -5], near: 0.1, far: 1000 }}>
+            
+            <Canvas>
+                <CustomCamera fov={33} rotation={[0.8,Math.PI*1.0,0]} position={[0.5, 10.4, -12]} near= {0.2} far= {1000}/>
               
                 {/*<MapControls/>*/}
                 <Html 
