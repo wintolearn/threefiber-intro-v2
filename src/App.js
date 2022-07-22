@@ -183,7 +183,7 @@ function App() {
                 {/*<CustomCamera fov={33} rotation={[0.8,Math.PI*1.0,0]} position={[0.5, 10.4, -12]} near= {0.2} far= {1000}/>*/}
 
               
-                <MapControls/>
+                {/*<MapControls/>*/}
                 <Html 
                 as='div' // Wrapping element (default: 'div')
                 >
@@ -259,7 +259,7 @@ function App() {
                         position={[0,0,0]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -269,7 +269,7 @@ function App() {
                         position={[1,0,0]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -279,7 +279,7 @@ function App() {
                         position={[-1,0,0]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -289,7 +289,7 @@ function App() {
                         position={[-2,0,0]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -299,7 +299,7 @@ function App() {
                         position={[-3,0,0]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -309,7 +309,7 @@ function App() {
                         position={[-4,0,0]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -319,7 +319,7 @@ function App() {
                         position={[-5,0,0]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -329,7 +329,7 @@ function App() {
                         position={[2,0,0]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -339,7 +339,7 @@ function App() {
                         position={[3,0,0]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -349,7 +349,7 @@ function App() {
                         position={[4,0,0]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -359,7 +359,7 @@ function App() {
                         position={[5,0,0]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -369,7 +369,7 @@ function App() {
                         position={[0,0,1]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -379,7 +379,7 @@ function App() {
                         position={[0,0,2]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -389,7 +389,7 @@ function App() {
                         position={[0,0,3]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -399,7 +399,7 @@ function App() {
                         position={[0,0,4]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -409,7 +409,7 @@ function App() {
                         position={[0,0,5]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -419,7 +419,7 @@ function App() {
                         position={[0,0,-1]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -429,7 +429,7 @@ function App() {
                         position={[0,0,-2]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -439,7 +439,7 @@ function App() {
                         position={[0,0,-3]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -449,7 +449,7 @@ function App() {
                         position={[0,0,-4]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
@@ -459,7 +459,7 @@ function App() {
                         position={[0,0,-5]}
                         scale={[8, 8, 8]}
                         rotation = {[Math.PI/2,Math.PI,0]}
-                        color="white" // default
+                        color="red" // default
                         anchorX="center" // default
                         anchorY="middle" // default
                     >
