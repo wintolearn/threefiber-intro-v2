@@ -13,11 +13,11 @@ import './App.css'
 
 function Box(props) {
     //const [ref,api] = useBox(()=>({mass: 1, position:[0,3,0]}))
-    const [ref,api] = useBox(()=>({ mass:1,args: [3.4, 1, 3.5]}))
+    const [ref,api] = useBox(()=>({ mass:1,args: [3.4, 1, 3.5],...props}))
     //useBox(() => ({ type: "Kinematic", args: [3.4, 1, 3.5]
     return (
       <mesh onClick={()=>{
-        api.velocity.set(0,10,0)
+        //api.velocity.set(0,4,0)
       }} ref={ref} >
         <boxGeometry attach="geometry" args={[1, 1, 1]}/>
         <meshPhysicalMaterial attach="material" color="hotpink"/>
@@ -26,9 +26,9 @@ function Box(props) {
   }
 
   function Plane(props) {
-    const [ref] = usePlane(()=>({rotation: [-Math.PI/2,0,0], position:[0,-3,0]}))
+    const [ref] = usePlane(()=>({rotation: [-Math.PI/2,0,0], position:[0,-0.6,0]}))
     return (
-      <mesh rotation ={[-Math.PI,0,0]} position={[0,-3,0]}>
+      <mesh rotation ={[-Math.PI,0,0]} position={[0,-0.6,0]}>
         <boxBufferGeometry attach="geometry" args={[10,0.1,10]}/>
         <meshLambertMaterial attach="material" color="white"/>
       </mesh>
@@ -37,25 +37,44 @@ function Box(props) {
 
 
 const UserWrapper = ({ position, rotation, id, setId, setBlockId }) => {
-    //const [ref,api] = useBox(()=>({ mass:1,args: [1, 1, 1]}))
+    const [ref,api] = useBox(()=>({ mass:1,args: [1, 1, 1],position:position}))
+    
+    
+    useEffect(()=>{
+        let x,y,z
+        [x,y,z]=position
+        console.log(x)
+        console.log(y)
+        console.log(z)
+        api.position.set(x,y,z)
+    })
+    
+    
+
     return (
        
-        <mesh //ref={ref}
+        <mesh ref={ref}
             onClick={()=>{
                 setBlockId(id)
                 setId(id)
                 console.log('mesh id: '+id)
+                api.velocity.set(0,4,0)
+                
                 //alert(id)
             }} 
 
-            scale={[0.7,1,0.5]}
+            scale={[1,1,1]}
+            
             position={position}
             rotation={rotation}
+            
             //geometry={new BoxBufferGeometry()}
             //material={new MeshNormalMaterial()}
         >
-            <boxGeometry />
-            <meshPhongMaterial color="#ff0000" opacity={0.5} transparent />
+            <boxGeometry attach="geometry" args={[1, 1, 1]}/>
+        <meshPhysicalMaterial attach="material" color="hotpink"/>
+            {/*<boxGeometry />
+            <meshPhongMaterial color="#ff0000" opacity={0.5} transparent />*/}
             {/* Optionally show the ID above the user's mesh */}
             <Text
                 position={[0, 1.0, 0]}
@@ -80,6 +99,8 @@ function App() {
     const [first, setFirst] = useState('');
     const [id, setId] = useState(null)
     const [blockId, setBlockId] = useState(null)
+
+    let initialized = false;
     
     useEffect(()=>{
         if(socketClient && !blockId){
@@ -105,8 +126,11 @@ function App() {
 
     useEffect(() => {
         // On mount initialize the socket connection
-        setSocketClient(io())
-        console.log('setsocketclient called'+socketClient)
+        if(!initialized){
+            setSocketClient(io())
+            console.log('setsocketclient(io) called'+socketClient)
+            initialized = true
+        }
  
 
         // Dispose gracefuly
@@ -153,12 +177,13 @@ function App() {
     //->render everything below using the updated clients object
     /*<Canvas camera={{ position: [-1, 8, -5], near: 0.1, far: 1000 }}>*/
     return (
-        socketClient && (//removing socketClient here has no effect
+         (//removing socketClient here has no effect
             
-            <Canvas>
-                <CustomCamera fov={33} rotation={[0.8,Math.PI*1.0,0]} position={[0.5, 10.4, -12]} near= {0.2} far= {1000}/>
+         <Canvas camera={{ position: [-1, 8, -5], near: 0.1, far: 1000 }}>
+                {/*<CustomCamera fov={33} rotation={[0.8,Math.PI*1.0,0]} position={[0.5, 10.4, -12]} near= {0.2} far= {1000}/>*/}
+
               
-                {/*<MapControls/>*/}
+                <MapControls/>
                 <Html 
                 as='div' // Wrapping element (default: 'div')
                 >
@@ -442,8 +467,11 @@ function App() {
                     </Text>
 
                 {/*below render the ControlsWrapper component and pass it socketClient as a prop */}
+               {/*for some reason grid is a weird scale
+                <gridHelper args={[20,20]} rotation={[0, 0, 0]} scale={[0.97,1,0.97]} position={[0,0,-0.4]} />
+                */}
+                 <gridHelper/>
                
-                <gridHelper rotation={[0, 0, 0]} />
                 <Stars/>
                     <ambientLight intensity = {0.5}/>
                     <spotLight position={[100,15,10]} angle={0.3}/>
@@ -478,16 +506,17 @@ function App() {
                                 setId={setId}
                                 //client.id
                                 //position={[position[0]+0.1,position[1]+0.1,position[2]+0.1]}
+                                
                                 position={position}
                                 rotation={rotation}
                             />
                         )
                     })}
                     
-                {/*
-                        <Box/>
+                
+                       
                         <Plane/>
-                */}
+                
                 </Physics>
 
             </Canvas>

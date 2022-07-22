@@ -43,11 +43,15 @@ ioServer.on('connection', (client) => {
     )
     console.log('clientid is: '+typeof(client.id))
     
+    console.log('adding a client from server')
 
     //Add a new client indexed by his id
     clients[client.id] = {
         position: [Math.floor(Math.random()*5), 0, Math.floor(Math.random()*5)],
-        rotation: [0, 0, 0],
+        //position: [0, 0, 0],
+ 
+        //rotation: [0, 0, 0],
+   
     }
 
     console.log(client.id)
@@ -100,6 +104,7 @@ ioServer.on('connection', (client) => {
             console.log('right clicked')
             var x = 1
             var moveInterval = setInterval(()=>{
+                console.log('moved right')
                 clients[id].position[0]-=offset
                 ioServer.sockets.emit('clicked', clients)
                 if(x>=10){
@@ -158,9 +163,9 @@ ioServer.on('connection', (client) => {
         )
 
         //Delete this client from the object
-        //delete clients[client.id]
+        delete clients[client.id]
 
-        //ioServer.sockets.emit('clicked', clients)
+        ioServer.sockets.emit('clicked', clients)
     })
 
 })
