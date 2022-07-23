@@ -10,6 +10,7 @@ const app = express()
 let welcomeMessage = 0
 
 let runfromServer = true;
+let checked = false;
 
 app.get("/api",(req,res)=>{
     res.json({message:welcomeMessage})
@@ -99,6 +100,7 @@ ioServer.on('connection', (client) => {
             }
             ioServer.sockets.emit('clicked', clients)
         }
+
         else if(direction == 'right'){
             
             console.log('right clicked')
@@ -109,6 +111,27 @@ ioServer.on('connection', (client) => {
                 ioServer.sockets.emit('clicked', clients)
                 if(x>=10){
                     clearInterval(moveInterval)
+                    //add a new block above this location
+                    if(checked){
+                        const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                        let result = '';
+                        const charactersLength = characters.length;
+                        length = 20
+                        for ( let i = 0; i < length; i++ ) {
+                            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+                        }
+                        tempIdArray.push(result)
+                        console.log(tempIdArray)
+                        let tempID = result
+                        console.log('tempID: '+tempIdArray[tempIdArray.length-1])
+                        clients[tempIdArray[tempIdArray.length-1]] = {
+                            //position: [clients[id].position[0], clients[id].position[1]+5, clients[id].position[2]],
+                            position: [clients[id].position[0], 0, clients[id].position[2]+1],
+                            rotation: [0, 0, 0],
+                        }
+                        ioServer.sockets.emit('clicked', clients)
+                    }
+                    
                 }
                 x++
             },40
@@ -152,6 +175,11 @@ ioServer.on('connection', (client) => {
                 x++
             },40
             )
+        }
+        else if(direction == 'checked'){
+            checked = !checked
+            console.log(checked)
+            
         }
 
         //ioServer.sockets.emit('clicked', clients)

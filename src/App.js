@@ -122,6 +122,16 @@ function App() {
         //alert('form submitted')
       };
 
+      const handleCheck = event => {
+        // 👇️ prevent page refresh
+        //event.preventDefault();
+
+        socketClient.emit('clicked', id, 'checked')
+    
+        console.log('check submitted ✅');
+        //alert('form submitted')
+      };
+
     
 
     useEffect(() => {
@@ -215,6 +225,29 @@ function App() {
                     </form>
                 </Html>
 
+                <Html 
+                as='div' // Wrapping element (default: 'div')
+                >
+
+                <form onClick={handleCheck}
+                    style={{
+                        color:'red',
+                        position: 'absolute',
+                        top:50,
+                        right:190
+                    }}
+                    >
+                    <label>
+                        Start Graphing:                  
+                    </label>
+                    <input
+                        type="checkbox"
+                        
+                        onChange={event => handleCheck}
+                    />
+                    </form>
+                </Html>
+
                 <MoveButton
                     socketClient = {socketClient}
                     id={id}
@@ -254,6 +287,7 @@ function App() {
                     top={0}
                     right={-80+300}
                 />
+
 
                 <Text
                         position={[0,0,0]}
