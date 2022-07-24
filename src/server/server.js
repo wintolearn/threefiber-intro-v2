@@ -1,6 +1,5 @@
 
 var express = require('express');
-const { checkOptions } = require('joi/lib/types/alternatives');
 var path = require('path');
 const { Server } = require('socket.io')
 
