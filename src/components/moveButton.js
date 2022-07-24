@@ -11,9 +11,34 @@ export const MoveButton = ({socketClient,id, direction, top, right}) =>{
             position: 'absolute',
             top:top,
             right: right
-        }} onClick={()=>{
-          socketClient.emit('clicked', id, direction
+        }}           
+        
+        onMouseDown={()=>{
+            socketClient.emit('mousedown', id
+            )
+            console.log('mousedown')
+        }}
+
+        onTouchStart={()=>{
+            socketClient.emit('mousedown', id
+            )
+            console.log('mousedown')
+        }}
+        
+        onClick={()=>{
+            socketClient.emit('clicked', id, direction
         )}}
+        
+        onMouseUp={()=>{
+            socketClient.emit('mouseup', id
+        )}}
+
+        onTouchEnd={()=>{
+            socketClient.emit('mouseup', id
+        )}}
+
+
+
         >{direction}</button>
         </Html> 
     )

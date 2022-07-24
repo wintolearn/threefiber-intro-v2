@@ -37,7 +37,9 @@ function Box(props) {
 
 
 const UserWrapper = ({ position, rotation, id, setId, setBlockId }) => {
-    const [ref,api] = useBox(()=>({ mass:1,args: [1, 1, 1],position:position}))
+    //const [ref,api] = useBox(()=>({ mass:1,args: [1, 1, 1],position:position,type: "Static"}))
+    
+    const [ref,api] = useBox(()=>({ mass:500,args: [0.8, 0.8, 0.8],position:position}))
     
     
     useEffect(()=>{
@@ -58,7 +60,9 @@ const UserWrapper = ({ position, rotation, id, setId, setBlockId }) => {
                 setBlockId(id)
                 setId(id)
                 console.log('mesh id: '+id)
-                api.velocity.set(0,4,0)
+                if(position[1]<0.2){
+                    api.velocity.set(-1.2,9,0)
+                }
                 
                 //alert(id)
             }} 
@@ -71,8 +75,9 @@ const UserWrapper = ({ position, rotation, id, setId, setBlockId }) => {
             //geometry={new BoxBufferGeometry()}
             //material={new MeshNormalMaterial()}
         >
-            <boxGeometry attach="geometry" args={[1, 1, 1]}/>
-        <meshPhysicalMaterial attach="material" color="hotpink"/>
+            <boxGeometry attach="geometry" args={[0.8, 0.8, 0.8]}/>
+            <meshPhongMaterial color="#ff0000" opacity={0.6} transparent />
+        {/*<meshPhysicalMaterial attach="material" color="hotpink"/>*/}
             {/*<boxGeometry />
             <meshPhongMaterial color="#ff0000" opacity={0.5} transparent />*/}
             {/* Optionally show the ID above the user's mesh */}
@@ -509,8 +514,17 @@ function App() {
                 <Stars/>
                     <ambientLight intensity = {0.5}/>
                     <spotLight position={[100,15,10]} angle={0.3}/>
- 
-                <Physics>
+                
+                <Physics
+                //gravity={[0, -100, 0]} 
+                  //   defaultContactMaterial={
+                    //   {
+                         //friction: 0.5, 
+                         //restitution: 1, 
+                         //contactEquationStiffness: 6000,
+                         //contactEquationRelaxation: 0.000001
+                        //}}
+                        >
                 
                 {/* Filter myself from the client list and create user boxes with IDs */}
                 {console.log('3. app rendering')}
