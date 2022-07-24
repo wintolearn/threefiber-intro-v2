@@ -57,6 +57,7 @@ function addBlock(id) {
         //position: [clients[id].position[0], clients[id].position[1]+5, clients[id].position[2]],
         position: [Math.floor(Math.random() * 5), 0, Math.floor(Math.random() * 5)],
         rotation: [0, 0, 0],
+        type: "Dynamic"
     }
 }
 
@@ -80,7 +81,8 @@ function addVertBlocks(height,x,y,z) {
         let tempID = result
         clients[tempIdArray[tempIdArray.length - 1]] = {
             position: [x,z+1.01*i,y],
-            rotation: [0, 0, 0]
+            rotation: [0, 0, 0],
+            type: "Static"
         }
     }
 }
@@ -96,6 +98,8 @@ ioServer.on('connection', (client) => {
     //Add a new client indexed by his id
     clients[client.id] = {
         position: [Math.floor(Math.random() * 5), 0.01, Math.floor(Math.random() * 5)],
+        type: "Dynamic",
+        scale:[0.5,0.5,0.5]
         //position: [0, 0, 0],
 
         //rotation: [0, 0, 0],
@@ -193,40 +197,20 @@ ioServer.on('connection', (client) => {
         else if (direction == 'right') {
 
             console.log('right clicked')
+            if(!checked){
             var x = 1
-            var moveInterval = setInterval(() => {
-                console.log('moved right')
-                clients[id].position[0] -= offset
-                ioServer.sockets.emit('clicked', clients)
-                if (x >= 10) {
-                    clearInterval(moveInterval)
-                    //add a new block above this location
-                    if (checked &&!mousedown) {
-                        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                        let result = '';
-                        const charactersLength = characters.length;
-                        length = 20
-                        for (let i = 0; i < length; i++) {
-                            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-                        }
-                        tempIdArray.push(result)
-                        console.log(tempIdArray)
-                        let tempID = result
-                        console.log('tempID: ' + tempIdArray[tempIdArray.length - 1])
-                        clients[tempIdArray[tempIdArray.length - 1]] = {
-                            //position: [clients[id].position[0], clients[id].position[1]+5, clients[id].position[2]],
-                            //calculate speed and add two 
-                            position: [clients[id].position[0], clients[id].position[1]+0.001, clients[id].position[2] + 2],
-                            rotation: [0, 0, 0],
-                        }
-                        ioServer.sockets.emit('clicked', clients)
+                var moveInterval = setInterval(() => {
+                    console.log('moved right')
+                    clients[id].position[0] -= offset
+                    ioServer.sockets.emit('clicked', clients)
+                    if (x >= 10) {
+                        clearInterval(moveInterval)
                     }
-
-                }
-                x++
-                //if turbo checked use 20 instead of 40
-            }, 40
-            )
+                    x++
+                    //if turbo checked use 20 instead of 40
+                }, 40
+                )
+            }
 
         }
         else if (direction == 'left') {

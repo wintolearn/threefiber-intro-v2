@@ -28,7 +28,7 @@ function Box(props) {
   function Plane(props) {
     const [ref] = usePlane(()=>({rotation: [-Math.PI/2,0,0], position:[0,-0.6,0]}))
     return (
-      <mesh rotation ={[-Math.PI,0,0]} position={[0,-0.6,0]}>
+      <mesh rotation ={[-Math.PI,0,0]} position={[0,-0.6,0]} >
         <boxBufferGeometry attach="geometry" args={[10,0.1,10]}/>
         <meshLambertMaterial attach="material" color="white"/>
       </mesh>
@@ -36,19 +36,22 @@ function Box(props) {
   }
 
 
-const UserWrapper = ({ position, rotation, id, setId, setBlockId }) => {
+const UserWrapper = ({ position, rotation, id, setId, setBlockId, type, scale }) => {
     //const [ref,api] = useBox(()=>({ mass:1,args: [1, 1, 1],position:position,type: "Static"}))
     
-    const [ref,api] = useBox(()=>({ mass:500,args: [0.8, 0.8, 0.8],position:position}))
+    const [ref,api] = useBox(()=>({ mass:50,args: [0.9, 0.9, 0.9],position:position, type:type, scale:scale}))
     
     
     useEffect(()=>{
         let x,y,z
+        //let xs,ys,zs
         [x,y,z]=position
         console.log(x)
         console.log(y)
         console.log(z)
+        
         api.position.set(x,y,z)
+        //api.scale.set(xs,ys,zs)
     })
     
     
@@ -61,20 +64,25 @@ const UserWrapper = ({ position, rotation, id, setId, setBlockId }) => {
                 setId(id)
                 console.log('mesh id: '+id)
 
-                
+                api.velocity.set(-2,8,0)
                 //alert(id)
             }} 
 
-            scale={[1,1,1]}
+           
             
             position={position}
             rotation={rotation}
+            type={type}
+            scale={scale}
+            linearDamping = {1000}
+            restitution = {0}
+            
             
             //geometry={new BoxBufferGeometry()}
             //material={new MeshNormalMaterial()}
         >
-            <boxGeometry attach="geometry" args={[0.8, 0.8, 0.8]}/>
-            <meshPhongMaterial color="#ff0000" opacity={0.6} transparent />
+            <boxGeometry attach="geometry" args={[0.9, 0.9, 0.9]}/>
+            <meshPhongMaterial color="#ff0000" opacity={0.95} transparent />
         {/*<meshPhysicalMaterial attach="material" color="hotpink"/>*/}
             {/*<boxGeometry />
             <meshPhongMaterial color="#ff0000" opacity={0.5} transparent />*/}
@@ -84,6 +92,7 @@ const UserWrapper = ({ position, rotation, id, setId, setBlockId }) => {
                 color="black"
                 anchorX="center"
                 anchorY="middle"
+                size={10}
             >
                 {id}
             </Text>
@@ -540,7 +549,7 @@ function App() {
                         //elements using a callback function
                         //console.log(clients[client])
                         
-                        const { position, rotation } = clients[client]
+                        const { position, rotation, type, scale } = clients[client]
                         return (
                             <UserWrapper
                            
@@ -555,6 +564,8 @@ function App() {
                                 
                                 position={position}
                                 rotation={rotation}
+                                type={type}
+                                scale={scale}
                             />
                         )
                     })}
