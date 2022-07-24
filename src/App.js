@@ -60,12 +60,7 @@ const UserWrapper = ({ position, rotation, id, setId, setBlockId }) => {
                 setBlockId(id)
                 setId(id)
                 console.log('mesh id: '+id)
-                console.log(ref.current.position[0])
-                console.log(api.position[1])
-                console.log(api.position[2])
-                if(position[1]<0.2){
-                    api.velocity.set(-1.2,9,0)
-                }
+
                 
                 //alert(id)
             }} 
